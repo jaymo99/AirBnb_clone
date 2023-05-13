@@ -24,13 +24,13 @@ class FileStorage():
 
         if obj_id:
             new_key = obj_classname + '.' + obj_id
-            self.__objects[new_key] = obj.to_dict()
+            self.__objects[new_key] = obj
 
     def save(self):
         '''serializes all objects to the JSON file in __file_path
         '''
         with open(self.__file_path, "w", encoding='utf-8') as f:
-            json.dump(self.__objects, f, indent=4)
+            json.dump({k: v.to_dict() for k, v in self.__objects.items()}, f)
 
     def reload(self):
         '''deserializes the JSON file in __file_path to __objects
