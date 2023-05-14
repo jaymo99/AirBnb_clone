@@ -1,9 +1,8 @@
 #!/usr/bin/python3
-'''File Storage module'''
+'''FileStorage module'''
 
 import os
 import json
-from models.base_model import BaseModel
 
 
 class FileStorage():
@@ -11,37 +10,36 @@ class FileStorage():
     deserializes JSON file to instances
     '''
     pwd = os.path.dirname(__file__)
-    __file_path = os.path.abspath(os.path.join(pwd, '..', '..', 'file.json'))
+
+    __file_path = os.path.abspath(os.path.join(pwd, "file.json"))
     __objects = {}
 
     def all(self):
-        '''returns a dictionary containing all objects
-        '''
+        '''returns a dictionary of all stored objects'''
         return self.__objects
 
     def new(self, obj):
-        '''sets/adds an object to a dictionary
-        '''
-        obj_classname = str(obj.__class__.__name__)
-        obj_id = getattr(obj, "id", None)
-
-        if obj_id:
-            new_key = obj_classname + '.' + obj_id
-            self.__objects[new_key] = obj
+        '''sets new object in self.__objects'''
+        cls_name = obj.__class__.__name__
+        new_key = f"{cls_name}.{obj.id}"
+        self.__objects[new_key] = obj
 
     def save(self):
-        '''serializes all objects to the JSON file in __file_path
-        '''
+        '''serializes stored objects to a JSON file'''
         with open(self.__file_path, "w", encoding='utf-8') as f:
-            json.dump({k: v.to_dict() for k, v in self.__objects.items()}, f)
+            new_dict = {k: v.to_dict() for k, v in self.__objects.items()}
+            json.dump(new_dict, f, indent=4)
 
     def reload(self):
-        '''deserializes the JSON file in __file_path to __objects
-        '''
+        '''deserializes a JSON file to self.__objects'''
+        from models.base_model import BaseModel
+
         try:
             with open(self.__file_path, "r", encoding='utf-8') as f:
-                reloaded_objs = json.load(f)
-                for key, value in reloaded_objs.items():
-                    self.__objects[key] = BaseModel(**value)
+                reloaded = json.load(f)
+                for key, value in reloaded.items():
+                    cls_name = value["__class__"]
+                    cls = locals()[cls_name]
+                    self.__objects[key] = cls(**value)
         except FileNotFoundError:
             pass

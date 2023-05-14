@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 '''Base model'''
 
-from models import storage
-from datetime import datetime
 import uuid
+from datetime import datetime
+from models import storage
 
 
 class BaseModel():
     '''defines all common attributes/methods for other classes'''
 
     def __init__(self, *args, **kwargs):
-        if kwargs and len(kwargs) > 0:
+        if kwargs and kwargs["__class__"] == "BaseModel":
             for key, value in kwargs.items():
                 if key != "__class__":
                     setattr(self, key, value)
@@ -45,7 +45,7 @@ class BaseModel():
     def to_dict(self):
         '''returns a dictionary containing all keys/values of "__dict__"
         '''
-        base_dict = self.__dict__
+        base_dict = dict(self.__dict__)
         base_dict["__class__"] = self.__class__.__name__
         base_dict["created_at"] = base_dict["created_at"].isoformat()
         base_dict["updated_at"] = base_dict["updated_at"].isoformat()
