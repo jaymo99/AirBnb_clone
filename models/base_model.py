@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 '''Base model'''
 
-from datetime import datetime
 from models import storage
+from datetime import datetime
 import uuid
 
 

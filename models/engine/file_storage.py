@@ -1,14 +1,17 @@
 #!/usr/bin/python3
 '''File Storage module'''
 
+import os
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage():
     '''serializes instances to a JSON file and
     deserializes JSON file to instances
     '''
-    __file_path = "file.json"
+    pwd = os.path.dirname(__file__)
+    __file_path = os.path.abspath(os.path.join(pwd, '..', '..', 'file.json'))
     __objects = {}
 
     def all(self):
@@ -37,6 +40,8 @@ class FileStorage():
         '''
         try:
             with open(self.__file_path, "r", encoding='utf-8') as f:
-                self.__objects = json.load(f)
+                reloaded_objs = json.load(f)
+                for key, value in reloaded_objs.items():
+                    self.__objects[key] = BaseModel(**value)
         except FileNotFoundError:
             pass
