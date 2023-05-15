@@ -87,6 +87,28 @@ class HBNBCommand(cmd.Cmd):
             print([str(obj) for obj in all_dict.values()\
                     if obj.__class__.__name__ == cls])
 
+    def do_destroy(self, line):
+        '''Deletes an instance based on the class name and id
+        '''
+        all_dict = storage.all()
+
+        if not line:
+            print(HBNBCommand.__err_msgs["cls_missing"])
+            return
+
+        line = line.split()
+        if line[0] not in HBNBCommand.__classes:
+            print(HBNBCommand.__err_msgs["cls_unexist"])
+        elif len(line) < 2:
+            print(HBNBCommand.__err_msgs["id_missing"])
+        elif f"{line[0]}.{line[1]}" not in all_dict:
+            print(HBNBCommand.__err_msgs["id_unexist"])
+        elif all_dict.get(f"{line[0]}.{line[1]}", None):
+            del all_dict[f"{line[0]}.{line[1]}"]
+            storage.save()
+        else:
+            print(HBNBCommand.__err_msgs["id_unexist"])
+            
     def help_show(self):
         print("\n".join(["Usage: show <class_name> <id>",
                         "prints the string representation of an instance\
