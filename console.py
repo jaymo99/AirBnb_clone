@@ -38,8 +38,15 @@ class HBNBCommand(cmd.Cmd):
         '''
         if not line:
             print(HBNBCommand.__err_msgs["cls_missing"])
-        elif line[0] not in HBNBCommand.__classes:
+            return
+
+        line = line.split()
+        if line[0] not in HBNBCommand.__classes:
             print(HBNBCommand.__err_msgs["cls_unexist"])
+        else:
+            new_obj = HBNBCommand.__classes[line[0]]()
+            new_obj.save()
+            print(new_obj.id)
 
     def do_show(self, line):
         '''prints the string representation of an instance
@@ -48,10 +55,10 @@ class HBNBCommand(cmd.Cmd):
         obj_dict = storage.all()
         if not line:
             print(HBNBCommand.__err_msgs["cls_missing"])
+            return
 
         line = line.split()
         if line[0] not in HBNBCommand.__classes:
-            print(line[0])
             print(HBNBCommand.__err_msgs["cls_unexist"])
         elif len(line) < 2:
             print(HBNBCommand.__err_msgs["id_missing"])
@@ -61,6 +68,24 @@ class HBNBCommand(cmd.Cmd):
             obj_str = obj_dict["{}.{}".format(line[0], line[1])]
             new_obj = HBNBCommand.__classes[line[0]](obj_str)
             print(new_obj)
+
+    def do_all(self, line):
+        '''prints the string representation of all instances
+        based or not on the class name.
+        '''
+        all_dict = storage.all()
+
+        if not line:
+            print([str(obj) for obj in all_dict.values()])
+            return
+
+        line = line.split()
+        if line[0] not in HBNBCommand.__classes:
+            print(HBNBCommand.__err_msgs["cls_unexist"])
+        else:
+            cls = line[0]
+            print([str(obj) for obj in all_dict.values()\
+                    if obj.__class__.__name__ == cls])
 
     def help_show(self):
         print("\n".join(["Usage: show <class_name> <id>",
