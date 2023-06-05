@@ -10,7 +10,7 @@ class BaseModel():
     '''defines all common attributes/methods for other classes'''
 
     def __init__(self, *args, **kwargs):
-        if kwargs and kwargs["__class__"] == "BaseModel":
+        if kwargs:
             for key, value in kwargs.items():
                 if key != "__class__":
                     setattr(self, key, value)
