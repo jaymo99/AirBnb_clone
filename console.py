@@ -165,6 +165,7 @@ class HBNBCommand(cmd.Cmd):
         obj_key = f"{_cls}.{_id}"
         if obj_key not in all_objs:
             print(HBNBCommand.__err_msgs["id_unexist"])
+            return
 
         if len_line < 3:
             print(HBNBCommand.__err_msgs["attr_missing"])
