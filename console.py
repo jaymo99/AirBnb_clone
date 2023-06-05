@@ -16,7 +16,7 @@ class HBNBCommand(cmd.Cmd):
             }
     __err_msgs = {
             "cls_missing": "** class name missing **",
-            "cls_unexist": "** class doesn't exist**",
+            "cls_unexist": "** class doesn't exist **",
             "id_missing": "** instance id missing **",
             "id_unexist": "** no instance found **",
             "attr_missing": "** attribute name missing **",

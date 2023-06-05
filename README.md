@@ -13,9 +13,13 @@ The project is still in its initial stages. The end goal is to have a complete w
 ## Quickstart
 1. Clone this repo
 ```git
-git clone git@github.com:jaymo99/AirBnb_clone.git
+git clone https://github.com/jaymo99/AirBnb_clone.git
 ```
-2. Initialize all git submodules in this repo
+2. Navigate inside the cloned repository
+```bash
+cd AirBnb_clone
+```
+3. Initialize all git submodules in this repo
 ```git
 git submodule update --init --recursive
 ```
