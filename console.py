@@ -2,10 +2,16 @@
 '''HBNB command interprester module'''
 
 import cmd
+import shlex
+
 from models import storage
 from models.base_model import BaseModel
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models.user import User
-import shlex
 
 
 class HBNBCommand(cmd.Cmd):
@@ -14,6 +20,11 @@ class HBNBCommand(cmd.Cmd):
 
     __classes = {
             "BaseModel": BaseModel,
+            "Amenity": Amenity,
+            "City": City,
+            "Place": Place,
+            "Review": Review,
+            "State": State,
             "User": User
             }
     __err_msgs = {
