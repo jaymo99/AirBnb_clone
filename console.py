@@ -80,7 +80,7 @@ class HBNBCommand(cmd.Cmd):
             return False
         
         for attr, val in attr_dict.items():
-            line = " ".join(["update", cls_name, model_id, str(attr), str(val)])
+            line = " ".join(["update", cls_name, model_id, str(attr), val])
             self.onecmd(line)
         return True
 
