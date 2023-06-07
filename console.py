@@ -55,13 +55,13 @@ class HBNBCommand(cmd.Cmd):
 
             if cmd_action == "update":
                 model_id, separator, attr_dict = cmd_args.partition(',')
-                update_attributes(cls_name, model_id, attr_dict)
-                return None
-            else:
-                cmd_args = cmd_args.split(',')
-                cmd_args = [arg.strip() for arg in cmd_args]
-                cmd_args = " ".join(cmd_args)
-                line = " ".join([cmd_action, cls_name, cmd_args])
+                if self.update_attributes(cls_name, model_id, attr_dict):
+                    return None
+
+            cmd_args = cmd_args.split(',')
+            cmd_args = [arg.strip() for arg in cmd_args]
+            cmd_args = " ".join(cmd_args)
+            line = " ".join([cmd_action, cls_name, cmd_args])
 
         return line
 
@@ -77,10 +77,12 @@ class HBNBCommand(cmd.Cmd):
             attr_dict = json.loads(attr_dict)
         except json.JSONDecodeError:
             attr_dict = {}
+            return False
         
         for attr, val in attr_dict.items():
             line = " ".join(["update", cls_name, model_id, str(attr), str(val)])
             self.onecmd(line)
+        return True
 
     @classmethod
     def __cast_attribute(cls, value):
