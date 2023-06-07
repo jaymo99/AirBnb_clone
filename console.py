@@ -2,6 +2,7 @@
 '''HBNB command interprester module'''
 
 import cmd
+import json
 import shlex
 
 from models import storage
@@ -36,8 +37,53 @@ class HBNBCommand(cmd.Cmd):
             "val_missing": "** value missing **"
             }
 
+    def emptyline(self):
+        '''ignore empty lines'''
+        pass
+
+    def precmd(self, line):
+        '''pre-command modifications.
+        Allow a user to use alternative command syntax
+        For example: <class-name>.all()
+        '''
+        line = line.strip()
+
+        if '.' in line:
+            cls_name, separator, end_line = line.partition('.')
+            cmd_action, separator, end_line = end_line.partition('(')
+            cmd_args, separator, end_line = end_line.partition(')')
+
+            if cmd_action == "update":
+                model_id, separator, attr_dict = cmd_args.partition(',')
+                update_attributes(cls_name, model_id, attr_dict)
+                return None
+            else:
+                cmd_args = cmd_args.split(',')
+                cmd_args = [arg.strip() for arg in cmd_args]
+                cmd_args = " ".join(cmd_args)
+                line = " ".join([cmd_action, cls_name, cmd_args])
+
+        return line
+
+    def update_attributes(self, cls_name, model_id, attr_dict):
+        '''update the attributes of a model
+
+        Args:
+            cls_name (str): The class name of that model.
+            model_id (str): The id of model to be updated.
+            attr_dict (str): a dictionary(str) of attribute values.
+        '''
+        try:
+            attr_dict = json.loads(attr_dict)
+        except json.JSONDecodeError:
+            attr_dict = {}
+        
+        for attr, val in attr_dict.items():
+            line = " ".join(["update", cls_name, model_id, str(attr), str(val)])
+            self.onecmd(line)
+
     @classmethod
-    def __cast_attribute(self, value):
+    def __cast_attribute(cls, value):
         '''casts a string value to appropriate data type
         '''
         try:
@@ -47,10 +93,6 @@ class HBNBCommand(cmd.Cmd):
                 return float(value)
             except ValueError:
                 return str(value)
-
-    def emptyline(self):
-        '''ignore empty lines'''
-        pass
 
     def do_EOF(self, line):
         '''a clean way to exit the command interpreter'''
