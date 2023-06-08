@@ -56,7 +56,10 @@ class HBNBCommand(cmd.Cmd):
             if cmd_action == "update":
                 model_id, separator, attr_dict = cmd_args.partition(',')
                 if self.update_attributes(cls_name, model_id, attr_dict):
-                    return None
+                    return ""
+                elif "{" in attr_dict:
+                    print("Invalid dictionary passed as argument")
+                    return ""
 
             cmd_args = cmd_args.split(',')
             cmd_args = [arg.strip() for arg in cmd_args]
@@ -76,11 +79,13 @@ class HBNBCommand(cmd.Cmd):
         try:
             attr_dict = json.loads(attr_dict)
         except json.JSONDecodeError:
-            attr_dict = {}
+            attr_dict = ""
+        if type(attr_dict) is not dict:
             return False
         
         for attr, val in attr_dict.items():
-            line = " ".join(["update", cls_name, model_id, str(attr), val])
+            line = " ".join(["update", cls_name, model_id, str(attr), str(val)])
+            print(line)
             self.onecmd(line)
         return True
 
