@@ -79,13 +79,16 @@ class HBNBCommand(cmd.Cmd):
         try:
             attr_dict = json.loads(attr_dict)
         except json.JSONDecodeError:
-            attr_dict = ""
+            try:
+                attr_dict = eval(attr_dict)
+            except SyntaxError:
+                attr_dict = ""
+
         if type(attr_dict) is not dict:
             return False
         
         for attr, val in attr_dict.items():
             line = " ".join(["update", cls_name, model_id, str(attr), str(val)])
-            print(line)
             self.onecmd(line)
         return True
 
