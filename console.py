@@ -86,9 +86,10 @@ class HBNBCommand(cmd.Cmd):
 
         if type(attr_dict) is not dict:
             return False
-        
+
         for attr, val in attr_dict.items():
-            line = " ".join(["update", cls_name, model_id, str(attr), str(val)])
+            line = " ".join(["update", cls_name, model_id,
+                            str(attr), str(val)])
             self.onecmd(line)
         return True
 
@@ -220,7 +221,7 @@ class HBNBCommand(cmd.Cmd):
             return
         else:
             _cls = line[0]
-        
+
         if len_line < 2:
             print(HBNBCommand.__err_msgs["id_missing"])
             return
@@ -261,7 +262,6 @@ class HBNBCommand(cmd.Cmd):
             print(cls)
         print()
 
-
     def do_destroy(self, line):
         '''Deletes an instance based on the class name and id
         '''
@@ -289,6 +289,38 @@ class HBNBCommand(cmd.Cmd):
         '''
         print("\nUsage: destroy <class-name> <id>\n"
               "-> deletes an instance/model based on the class-name and id.\n"
+              "\nDocumented class-names:\n"
+              "========================")
+        for cls in HBNBCommand.__classes:
+            print(cls)
+        print()
+
+    def do_count(self, line):
+        '''counts the number of instances of a class
+        '''
+        all_objs = storage.all()
+        count = 0
+
+        if not line:
+            print(HBNBCommand.__err_msgs["cls_missing"])
+            return
+
+        line = line.split()
+        if line[0] not in HBNBCommand.__classes:
+            print(HBNBCommand.__err_msgs["cls_unexist"])
+        else:
+            cls = line[0]
+            for obj in all_objs.values():
+                if (obj.__class__.__name__ == cls):
+                    count += 1
+        print(count)
+
+    def help_all(self):
+        '''displays information about `count` command
+        '''
+        print("\nUsage-1: count <class-name>"
+              "\nAlt-syntax: <class-name>.count()\n"
+              "-> retrieve the number of instances of a class\n"
               "\nDocumented class-names:\n"
               "========================")
         for cls in HBNBCommand.__classes:
