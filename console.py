@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-'''HBNB command interprester module'''
+'''HBNB command interpreter module'''
 
 import cmd
 import json
