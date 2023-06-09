@@ -19,7 +19,8 @@ class TestFileStorage(unittest.TestCase):
         cls.json_file = FileStorage._FileStorage__file_path
 
         file_directory = os.path.dirname(cls.json_file)
-        cls.new_file = os.path.abspath(os.path.join(file_directory, "sample.json"))
+        cls.new_file = os.path.abspath(
+                os.path.join(file_directory, "sample.json"))
         cls.storage._FileStorage__file_path = cls.new_file
 
     @classmethod

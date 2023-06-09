@@ -23,7 +23,6 @@ class TestBaseModel(unittest.TestCase):
             del all_objs[obj_key]
             storage.save()
 
-
     def test_model_creation(self):
         self.assertIsInstance(self.model, BaseModel)
         self.assertTrue(hasattr(self.model, "id"))
