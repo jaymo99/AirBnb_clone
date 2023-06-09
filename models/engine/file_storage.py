@@ -47,5 +47,5 @@ class FileStorage():
                     cls_name = value["__class__"]
                     cls = locals()[cls_name]
                     self.__objects[key] = cls(**value)
-        except FileNotFoundError:
+        except (FileNotFoundError, json.JSONDecodeError):
             pass
