@@ -14,6 +14,16 @@ class TestBaseModel(unittest.TestCase):
         cls.json_file = os.path.join(pwd, "../../models/engine/file.json")
         cls.json_file = os.path.normpath(cls.json_file)
 
+    @classmethod
+    def tearDownClass(cls):
+        pass
+        all_objs = storage.all()
+        obj_key = f"BaseModel.{cls.model.id}"
+        if obj_key in all_objs:
+            del all_objs[obj_key]
+            storage.save()
+
+
     def test_model_creation(self):
         self.assertIsInstance(self.model, BaseModel)
         self.assertTrue(hasattr(self.model, "id"))
