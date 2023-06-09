@@ -1,26 +1,48 @@
+import os
 import unittest
-
 from datetime import datetime
+
+from models import storage
 from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):
-    def test_initialization(self):
-        base_model = BaseModel()
-        self.assertIsInstance(base_model, BaseModel)
-        self.assertTrue(hasattr(base_model, "id"))
-        self.assertIsInstance(base_model.id, str)
-        self.assertTrue(hasattr(base_model, "created_at"))
-        self.assertIsInstance(base_model.created_at, datetime)
-        self.assertTrue(hasattr(base_model, "updated_at"))
-        self.assertIsInstance(base_model.created_at, datetime)
+    @classmethod
+    def setUpClass(cls):
+        cls.model = BaseModel()
+        pwd = os.path.dirname(__file__)
+        cls.json_file = os.path.join(pwd, "../../models/engine/file.json")
+        cls.json_file = os.path.normpath(cls.json_file)
+
+    def test_model_creation(self):
+        self.assertIsInstance(self.model, BaseModel)
+        self.assertTrue(hasattr(self.model, "id"))
+        self.assertIsInstance(self.model.id, str)
+        self.assertTrue(hasattr(self.model, "created_at"))
+        self.assertIsInstance(self.model.created_at, datetime)
+        self.assertTrue(hasattr(self.model, "updated_at"))
+        self.assertIsInstance(self.model.created_at, datetime)
 
     def test_str(self):
-        pass
+        expected_str = f"[BaseModel] ({self.model.id}) {self.model.__dict__}"
+        self.assertEqual(expected_str, str(self.model))
 
-# A new BaseModel can be created
-# Newly created BaseModel has id, created_at, updated_at
-# Test that __str__ prints [<class name>] (<self.id>) <self.__dict__>
-# Test that `save(self)` updates the public instance attribute `updated_at` with current datetime
-# Test that `to_dict(self` returns a dictionary of all keys and values
-#       -> The dates should be in iso format
+    def test_save(self):
+        model_key = f"BaseModel.{self.model.id}"
+        pre_value = self.model.updated_at
+        self.model.save()
+        post_value = self.model.updated_at
+        self.assertNotEqual(pre_value, post_value)
+
+        with open(self.json_file, "r", encoding='utf-8') as f:
+            file_content = f.read()
+            self.assertIn(model_key, file_content)
+
+    def test_to_dict(self):
+        expected_dict = {
+                'id': f"{self.model.id}",
+                'created_at': f"{datetime.isoformat(self.model.created_at)}",
+                'updated_at': f"{datetime.isoformat(self.model.updated_at)}",
+                '__class__': 'BaseModel'
+                }
+        self.assertEqual(expected_dict, self.model.to_dict())
