@@ -13,10 +13,6 @@ class TestPlace(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         pass
-        all_objs = storage.all()
-        obj_key = f"Place.{cls.place.id}"
-        if obj_key in all_objs:
-            del all_objs[obj_key]
 
     def test_place_init(self):
         self.assertIsInstance(self.place, Place)

@@ -1,4 +1,5 @@
 import os
+import shutil
 import unittest
 from datetime import datetime
 
@@ -9,19 +10,17 @@ from models.base_model import BaseModel
 class TestBaseModel(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = BaseModel()
         pwd = os.path.dirname(__file__)
         cls.json_file = os.path.join(pwd, "../../models/engine/file.json")
         cls.json_file = os.path.normpath(cls.json_file)
+        backup_dir = os.path.dirname(cls.json_file)
+        cls.backup_file = os.path.join(backup_dir, "backup.json")
+        shutil.copy2(cls.json_file, cls.backup_file)
+        cls.model = BaseModel()
 
     @classmethod
     def tearDownClass(cls):
-        pass
-        all_objs = storage.all()
-        obj_key = f"BaseModel.{cls.model.id}"
-        if obj_key in all_objs:
-            del all_objs[obj_key]
-            storage.save()
+        shutil.move(cls.backup_file, cls.json_file)
 
     def test_model_creation(self):
         self.assertIsInstance(self.model, BaseModel)

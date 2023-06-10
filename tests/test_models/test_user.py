@@ -13,10 +13,6 @@ class TestUser(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         pass
-        all_objs = storage.all()
-        obj_key = f"User.{cls.user.id}"
-        if obj_key in all_objs:
-            del all_objs[obj_key]
 
     def test_user_init(self):
         email_regex = r'^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
