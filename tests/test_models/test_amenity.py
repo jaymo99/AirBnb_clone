@@ -2,6 +2,7 @@ import unittest
 
 from models import storage
 from models.amenity import Amenity
+from models.base_model import BaseModel
 
 
 class TestAmenity(unittest.TestCase):
@@ -18,5 +19,8 @@ class TestAmenity(unittest.TestCase):
             del all_objs[obj_key]
             storage.save()
 
-    def test_initialization(self):
+    def test_amenity_init(self):
         self.assertIsInstance(self.amenity, Amenity)
+        self.assertTrue(issubclass(Amenity, BaseModel))
+        self.assertTrue(hasattr(self.amenity, "name"))
+        self.assertIsInstance(self.amenity.name, str)
