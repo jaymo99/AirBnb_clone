@@ -17,7 +17,6 @@ class TestReview(unittest.TestCase):
         obj_key = f"Review.{cls.review.id}"
         if obj_key in all_objs:
             del all_objs[obj_key]
-            storage.save()
 
     def test_review_init(self):
         self.assertIsInstance(self.review, Review)

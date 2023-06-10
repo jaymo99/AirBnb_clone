@@ -17,7 +17,6 @@ class TestPlace(unittest.TestCase):
         obj_key = f"Place.{cls.place.id}"
         if obj_key in all_objs:
             del all_objs[obj_key]
-            storage.save()
 
     def test_place_init(self):
         self.assertIsInstance(self.place, Place)

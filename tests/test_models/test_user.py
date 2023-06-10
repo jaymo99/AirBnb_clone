@@ -17,10 +17,9 @@ class TestUser(unittest.TestCase):
         obj_key = f"User.{cls.user.id}"
         if obj_key in all_objs:
             del all_objs[obj_key]
-            storage.save()
 
     def test_user_init(self):
-        email_regex = r'^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$' 
+        email_regex = r'^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         self.assertIsInstance(self.user, User)
         self.assertTrue(issubclass(User, BaseModel))
         self.assertTrue(hasattr(self.user, "email"))

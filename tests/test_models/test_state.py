@@ -17,7 +17,6 @@ class TestState(unittest.TestCase):
         obj_key = f"State.{cls.state.id}"
         if obj_key in all_objs:
             del all_objs[obj_key]
-            storage.save()
 
     def test_state_init(self):
         self.assertIsInstance(self.state, State)
